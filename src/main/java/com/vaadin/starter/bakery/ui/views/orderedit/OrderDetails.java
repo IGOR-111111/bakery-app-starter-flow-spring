@@ -3,10 +3,6 @@
  */
 package com.vaadin.starter.bakery.ui.views.orderedit;
 
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
@@ -16,6 +12,7 @@ import com.vaadin.flow.component.littemplate.LitTemplate;
 import com.vaadin.flow.component.template.Id;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.dom.Element;
+import com.vaadin.flow.internal.JsonUtils;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.HistoryItem;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
@@ -29,7 +26,6 @@ import com.vaadin.starter.bakery.ui.views.storefront.converters.StorefrontLocalD
 import com.vaadin.starter.bakery.ui.views.storefront.events.CommentEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.EditEvent;
 
-import elemental.json.Json;
 import elemental.json.JsonArray;
 import elemental.json.JsonObject;
 
@@ -87,10 +83,10 @@ public class OrderDetails extends LitTemplate {
 		getElement().setProperty("review", review);
 		this.order = order;
 
-		JsonObject item = beanToJson(order);
+		JsonObject item = JsonUtils.beanToJson(order);
 
 		// Include formatted values to the JsonObject
-		item.put("formattedDueDate", beanToJson(new StorefrontLocalDateConverter().encode(order.getDueDate())));
+		item.put("formattedDueDate", new StorefrontLocalDateConverter().encode(order.getDueDate()));
 		item.put("formattedDueTime", new LocalTimeConverter().encode(order.getDueTime()));
 		item.put("formattedTotalPrice", new CurrencyFormatter().encode(order.getTotalPrice()));
 
@@ -114,18 +110,6 @@ public class OrderDetails extends LitTemplate {
 			commentField.clear();
 		}
 		this.isDirty = review;
-	}
-
-	// Workaround https://github.com/vaadin/flow/issues/13317
-	private JsonObject beanToJson(Object bean) {
-		try {
-			ObjectMapper objectMapper = new ObjectMapper();
-			objectMapper.registerModule(new JavaTimeModule());
-			return Json.parse(objectMapper.writeValueAsString(bean));
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 	public boolean isDirty() {
