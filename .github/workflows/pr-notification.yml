@@ -1,31 +1,29 @@
-name: Notificar PR
+name: Notificar Autor do PR
 
+# Este workflow é executado quando um Pull Request é aberto ou reaberto
 on:
   pull_request:
-    types: [opened, reopened, synchronize]
+    types: [opened, reopened]
 
 jobs:
-  notify:
+  comment_on_pr:
     runs-on: ubuntu-latest
     steps:
-      - name: Notificar colega
-        uses: actions/github-script@v6
+      - name: Adicionar Comentário ao PR
+        # Usamos uma Action de terceiros (peter-evans/create-or-update-comment)
+        # que facilita a criação de comentários em Issues ou PRs.
+        uses: peter-evans/create-or-update-comment@v4
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const reviewer = 'IGOR-222222';
-
-            // Obter PR de forma segura
-            const { pull_request: pr } = github.context.payload || {};
-
-            if (!pr) {
-              console.log("Nenhum Pull Request encontrado. Workflow cancelado.");
-              return;
-            }
-
-            await github.rest.issues.createComment({
-              owner: github.context.repo.owner,
-              repo: github.context.repo.repo,
-              issue_number: pr.number,
-              body: `@${reviewer}, há um novo Pull Request: **${pr.title}**. Confira aqui: ${pr.html_url}`
-            });
+          # O número da Issue/PR onde o comentário será feito.
+          issue-number: ${{ github.event.pull_request.number }}
+          # A mensagem que será o corpo do comentário.
+          body: |
+            👋 Olá, @${{ github.event.pull_request.user.login }}!
+            
+            Obrigado por abrir este Pull Request! A nossa CI/CD começou a correr as verificações.
+            
+            **Tarefas importantes:**
+            1. Confirme que todos os requisitos do PR foram cumpridos.
+            2. Peça um *review* quando estiver pronto.
+          # O token de autenticação (fornecido automaticamente pelo GitHub)
+          token: ${{ secrets.GITHUB_TOKEN }}
