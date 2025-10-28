@@ -1,4 +1,4 @@
-name: Notificar Autor do PR
+name: Notificar Colega Fixo (Igor)
 
 # Este workflow é executado quando um Pull Request é aberto ou reaberto
 on:
@@ -9,21 +9,16 @@ jobs:
   comment_on_pr:
     runs-on: ubuntu-latest
     steps:
-      - name: Adicionar Comentário ao PR
-        # Usamos uma Action de terceiros (peter-evans/create-or-update-comment)
-        # que facilita a criação de comentários em Issues ou PRs.
+      - name: Adicionar Comentário ao PR e Notificar Igor
         uses: peter-evans/create-or-update-comment@v4
         with:
-          # O número da Issue/PR onde o comentário será feito.
           issue-number: ${{ github.event.pull_request.number }}
-          # A mensagem que será o corpo do comentário.
           body: |
-            👋 Olá, @${{ github.event.pull_request.user.login }}!
+            👋 Olá, @Igor-222222!
             
-            Obrigado por abrir este Pull Request! A nossa CI/CD começou a correr as verificações.
+            Um novo Pull Request foi criado por @${{ github.event.pull_request.user.login }}.
             
-            **Tarefas importantes:**
-            1. Confirme que todos os requisitos do PR foram cumpridos.
-            2. Peça um *review* quando estiver pronto.
-          # O token de autenticação (fornecido automaticamente pelo GitHub)
+            **A sua atenção é necessária!**
+            Por favor, faça a revisão deste PR assim que possível.
+          
           token: ${{ secrets.GITHUB_TOKEN }}
