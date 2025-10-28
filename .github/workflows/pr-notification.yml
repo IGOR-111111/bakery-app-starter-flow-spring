@@ -13,19 +13,19 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            // Substitui pelo GitHub login do colega
+            // Login do colega a ser notificado
             const reviewer = 'IGOR-222222';
 
-            // O objeto pull_request vem de context.payload
+            // Obter PR do payload
             const pr = github.context.payload.pull_request;
 
-            if (pr) {
-              await github.rest.issues.createComment({
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
-                issue_number: pr.number,
-                body: `@${reviewer}, há um novo Pull Request: **${pr.title}**. Confira aqui: ${pr.html_url}`
-              });
-            } else {
-              console.log("Nenhum PR encontrado no payload.");
+            if (!pr) {
+              console.log("Nenhum PR encontrado. Workflow cancelado.");
+              return;
             }
+
+            // Criar comentário na PR notificando o colega
+            await github.rest.issues.createComment({
+              owner: github.context.repo.owner,
+              repo: github.context.repo.repo,
+              issu
