@@ -11,15 +11,21 @@ jobs:
       - name: Notificar colega
         uses: actions/github-script@v6
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const reviewer = 'IGOR-222222'; // coloca o login GitHub do teu colega
-            const prNumber = context.payload.pull_request.number;
-            const prTitle = context.payload.pull_request.title;
-            const prUrl = context.payload.pull_request.html_url;
+            // Substitui pelo GitHub login do colega
+            const reviewer = 'IGOR-222222';
 
-            github.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: prNumber,
-              body: `@${reviewer}, há um novo Pull Request: **${prTitle}**. Confira aqui: ${prUrl}`
-            });
+            // O objeto pull_request vem de context.payload
+            const pr = github.context.payload.pull_request;
+
+            if (pr) {
+              await github.rest.issues.createComment({
+                owner: github.context.repo.owner,
+                repo: github.context.repo.repo,
+                issue_number: pr.number,
+                body: `@${reviewer}, há um novo Pull Request: **${pr.title}**. Confira aqui: ${pr.html_url}`
+              });
+            } else {
+              console.log("Nenhum PR encontrado no payload.");
+            }
