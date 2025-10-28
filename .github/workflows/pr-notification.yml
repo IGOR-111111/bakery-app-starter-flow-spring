@@ -1,0 +1,25 @@
+name: Notificar PR
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notificar colega
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const reviewer = 'IGOR-222222'; // coloca o login GitHub do teu colega
+            const prNumber = context.payload.pull_request.number;
+            const prTitle = context.payload.pull_request.title;
+            const prUrl = context.payload.pull_request.html_url;
+
+            github.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: `@${reviewer}, há um novo Pull Request: **${prTitle}**. Confira aqui: ${prUrl}`
+            });
