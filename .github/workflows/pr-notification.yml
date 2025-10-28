@@ -28,4 +28,6 @@ jobs:
             await github.rest.issues.createComment({
               owner: github.context.repo.owner,
               repo: github.context.repo.repo,
-              issu
+              issue_number: pr.number,
+              body: `@${reviewer}, há um novo Pull Request: **${pr.title}**. Confira aqui: ${pr.html_url}`
+            });
