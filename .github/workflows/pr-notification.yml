@@ -15,15 +15,14 @@ jobs:
           script: |
             const reviewer = 'IGOR-222222';
 
-            // Obter o pull request do contexto
-            const pr = github.context.payload.pull_request;
+            // Obter PR de forma segura
+            const { pull_request: pr } = github.context.payload || {};
 
             if (!pr) {
-              console.log("Nenhum Pull Request encontrado. Encerrando workflow.");
+              console.log("Nenhum Pull Request encontrado. Workflow cancelado.");
               return;
             }
 
-            // Criar comentário na PR
             await github.rest.issues.createComment({
               owner: github.context.repo.owner,
               repo: github.context.repo.repo,
