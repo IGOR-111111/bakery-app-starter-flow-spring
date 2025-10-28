@@ -13,18 +13,17 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            // Login do colega a ser notificado
             const reviewer = 'IGOR-222222';
 
-            // Obter PR do payload
+            // Obter o pull request do contexto
             const pr = github.context.payload.pull_request;
 
             if (!pr) {
-              console.log("Nenhum PR encontrado. Workflow cancelado.");
+              console.log("Nenhum Pull Request encontrado. Encerrando workflow.");
               return;
             }
 
-            // Criar comentário na PR notificando o colega
+            // Criar comentário na PR
             await github.rest.issues.createComment({
               owner: github.context.repo.owner,
               repo: github.context.repo.repo,
