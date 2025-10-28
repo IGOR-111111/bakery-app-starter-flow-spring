@@ -1,24 +1,27 @@
-name: Notificar Colega Fixo (Igor)
+name: Notificar Igor para Revisão
 
-# Este workflow é executado quando um Pull Request é aberto ou reaberto
 on:
   pull_request:
-    types: [opened, reopened]
+    types: [opened]
 
 jobs:
-  comment_on_pr:
+  notificar_igor:
     runs-on: ubuntu-latest
+    
+    # 💥 ADICIONE ESTAS DUAS LINHAS AQUI 💥
+    permissions:
+      issues: write  
+    
     steps:
-      - name: Adicionar Comentário ao PR e Notificar Igor
+      - name: Comentar no PR e Mencionar Igor
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            👋 Olá, @Igor-222222!
+            **⚠️ Atenção, @Igor-222222!**
             
-            Um novo Pull Request foi criado por @${{ github.event.pull_request.user.login }}.
+            Um novo Pull Request (#${{ github.event.pull_request.number }}) foi aberto por **@${{ github.event.pull_request.user.login }}**.
             
-            **A sua atenção é necessária!**
-            Por favor, faça a revisão deste PR assim que possível.
+            É necessária a sua revisão deste PR.
           
           token: ${{ secrets.GITHUB_TOKEN }}
