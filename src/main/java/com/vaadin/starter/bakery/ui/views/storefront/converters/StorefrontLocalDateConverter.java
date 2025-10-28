@@ -5,12 +5,15 @@ import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.WEEKDAY_FULLNAM
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.vaadin.flow.internal.JacksonUtils;
+
 /**
  * Date converter specific for the way date is displayed in storefront.
  */
 public class StorefrontLocalDateConverter {
 
-	public StorefrontDate encode(LocalDate modelValue) {
+	public ObjectNode encode(LocalDate modelValue) {
 		StorefrontDate result = null;
 		if (modelValue != null) {
 			result = new StorefrontDate();
@@ -18,6 +21,6 @@ public class StorefrontLocalDateConverter {
 			result.setWeekday(WEEKDAY_FULLNAME_FORMATTER.format(modelValue));
 			result.setDate(modelValue.toString());
 		}
-		return result;
+		return JacksonUtils.beanToJson(result);
 	}
 }

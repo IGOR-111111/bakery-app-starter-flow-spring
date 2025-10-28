@@ -121,3 +121,12 @@ Pro components used in the starter are :
  - [Vaadin Confirm Dialog](https://vaadin.com/components/vaadin-confirm-dialog)
 
  Also the tests are created using [Testbench](https://vaadin.com/testbench) library.
+
+
+# Nickname do grupo: IGOR-TESTES
+
+| Nome          | Número | Curso |
+|---------------|--------|-------|
+| Igor Batista1 | 111111 | LEI   |
+| Igor Batista2 | 222222 | LEI   |
+| Igor Batista3 | 333333 | LEI   |

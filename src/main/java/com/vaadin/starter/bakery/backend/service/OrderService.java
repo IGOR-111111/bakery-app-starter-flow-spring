@@ -70,10 +70,10 @@ public class OrderService implements CrudService<Order> {
 			Optional<LocalDate> optionalFilterDate, Pageable pageable) {
 		if (optionalFilter.isPresent() && !optionalFilter.get().isEmpty()) {
 			if (optionalFilterDate.isPresent()) {
-				return orderRepository.findByCustomerFullNameContainingIgnoreCaseAndDueDateAfter(
+				return orderRepository.findByCustomer_FullNameContainingIgnoreCaseAndDueDateAfter(
 						optionalFilter.get(), optionalFilterDate.get(), pageable);
 			} else {
-				return orderRepository.findByCustomerFullNameContainingIgnoreCase(optionalFilter.get(), pageable);
+				return orderRepository.findByCustomer_FullNameContainingIgnoreCase(optionalFilter.get(), pageable);
 			}
 		} else {
 			if (optionalFilterDate.isPresent()) {
@@ -91,10 +91,10 @@ public class OrderService implements CrudService<Order> {
 
 	public long countAnyMatchingAfterDueDate(Optional<String> optionalFilter, Optional<LocalDate> optionalFilterDate) {
 		if (optionalFilter.isPresent() && optionalFilterDate.isPresent()) {
-			return orderRepository.countByCustomerFullNameContainingIgnoreCaseAndDueDateAfter(optionalFilter.get(),
+			return orderRepository.countByCustomer_FullNameContainingAndDueDateAfterAllIgnoreCase(optionalFilter.get(),
 					optionalFilterDate.get());
 		} else if (optionalFilter.isPresent()) {
-			return orderRepository.countByCustomerFullNameContainingIgnoreCase(optionalFilter.get());
+			return orderRepository.countByCustomer_FullNameContainingIgnoreCase(optionalFilter.get());
 		} else if (optionalFilterDate.isPresent()) {
 			return orderRepository.countByDueDateAfter(optionalFilterDate.get());
 		} else {

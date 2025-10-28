@@ -22,10 +22,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 	Page<Order> findByDueDateAfter(LocalDate filterDate, Pageable pageable);
 
 	@EntityGraph(value = Order.ENTITY_GRAPTH_BRIEF, type = EntityGraphType.LOAD)
-	Page<Order> findByCustomerFullNameContainingIgnoreCase(String searchQuery, Pageable pageable);
+	Page<Order> findByCustomer_FullNameContainingIgnoreCase(String searchQuery, Pageable pageable);
 
 	@EntityGraph(value = Order.ENTITY_GRAPTH_BRIEF, type = EntityGraphType.LOAD)
-	Page<Order> findByCustomerFullNameContainingIgnoreCaseAndDueDateAfter(String searchQuery, LocalDate dueDate, Pageable pageable);
+	Page<Order> findByCustomer_FullNameContainingIgnoreCaseAndDueDateAfter(String searchQuery, LocalDate dueDate, Pageable pageable);
 
 	@Override
 	@EntityGraph(value = Order.ENTITY_GRAPTH_BRIEF, type = EntityGraphType.LOAD)
@@ -44,9 +44,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
 	long countByDueDateAfter(LocalDate dueDate);
 
-	long countByCustomerFullNameContainingIgnoreCase(String searchQuery);
+	long countByCustomer_FullNameContainingIgnoreCase(String searchQuery);
 
-	long countByCustomerFullNameContainingIgnoreCaseAndDueDateAfter(String searchQuery, LocalDate dueDate);
+	// should be countByCustomer_FullNameContainingIgnoreCaseAndDueDateAfter but gives the error
+	// Unable to ignore case of com.vaadin.starter.bakery.backend.data.entity.Customer types, the property 'customer' must reference a String
+	// May be a bug in spring.
+	long countByCustomer_FullNameContainingAndDueDateAfterAllIgnoreCase(String searchQuery, LocalDate dueDate);
 
 	long countByDueDate(LocalDate dueDate);
 
