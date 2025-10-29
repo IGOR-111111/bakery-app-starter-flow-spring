@@ -2,24 +2,25 @@ name: Notificar Igor no PR
 
 on:
   pull_request:
-    types: [opened] # Executa este workflow apenas quando um PR é aberto
+    types: [opened]
+
+# 🚨 A correção CRÍTICA para o erro 403 Forbidden
+permissions:
+  contents: read # Permissão padrão para ler o código
+  issues: write # Permite que o Action crie comentários (em Issues e PRs)
 
 jobs:
   notificar_colega:
+    # Garante que o token de segurança no job tenha as permissões definidas acima.
     runs-on: ubuntu-latest
     steps:
       - name: Adicionar Comentário de Notificação ao Colega
-        # Usa uma Ação de terceiros para comentar no PR
+        # Usa a variável GITHUB_TOKEN que agora tem permissão de issues: write
         uses: actions/github-script@v6
         with:
           script: |
-            // O contexto do GitHub fornece todas as informações do evento, 
-            // incluindo o número do PR (issue_number) e o repositório.
-            
-            // Variável com o nome de utilizador do colega
             const reviewer = 'IGOR-222222';
             
-            // Envia um comentário para notificar o colega
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
