@@ -8,9 +8,12 @@ jobs:
   notificar_igor:
     runs-on: ubuntu-latest
     
-    # 💥 ADICIONE ESTAS DUAS LINHAS AQUI 💥
+    # 💥 ESTE É O BLOCO QUE CORRIGE O ERRO 403 💥
     permissions:
+      # A permissão 'issues: write' permite criar comentários.
       issues: write  
+      # Recomenda-se manter 'contents: read' para operações básicas
+      contents: read
     
     steps:
       - name: Comentar no PR e Mencionar Igor
