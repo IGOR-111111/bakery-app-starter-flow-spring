@@ -1,4 +1,4 @@
-name: Notificar Igor para Revisão
+name: Notificar Igor para Revisão (Alternativa)
 
 on:
   pull_request:
@@ -8,23 +8,31 @@ jobs:
   notificar_igor:
     runs-on: ubuntu-latest
     
-    # 💥 ESTE É O BLOCO QUE CORRIGE O ERRO 403 💥
+    # 💥 PERMISSÃO CRÍTICA (Adicione ao seu YAML) 💥
     permissions:
-      # A permissão 'issues: write' permite criar comentários.
-      issues: write  
-      # Recomenda-se manter 'contents: read' para operações básicas
+      issues: write
       contents: read
-    
+      
     steps:
-      - name: Comentar no PR e Mencionar Igor
-        uses: peter-evans/create-or-update-comment@v4
+      - name: Adicionar Comentário ao PR e Notificar Igor
+        uses: actions/github-script@v6
         with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            **⚠️ Atenção, @Igor-222222!**
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = context.issue.number;
+            const prAuthor = context.payload.pull_request.user.login;
             
-            Um novo Pull Request (#${{ github.event.pull_request.number }}) foi aberto por **@${{ github.event.pull_request.user.login }}**.
-            
-            É necessária a sua revisão deste PR.
-          
-          token: ${{ secrets.GITHUB_TOKEN }}
+            const message = `
+              **⚠️ Atenção, @Igor-222222!**
+              
+              Um novo Pull Request (#${prNumber}) foi aberto por **@${prAuthor}**.
+              
+              É necessária a sua revisão deste PR.
+            `;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: message
+            });
