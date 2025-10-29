@@ -1,38 +1,28 @@
-name: Notificar Igor para Revisão (Alternativa)
+name: Notificar Igor no PR
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened] # Executa este workflow apenas quando um PR é aberto
 
 jobs:
-  notificar_igor:
+  notificar_colega:
     runs-on: ubuntu-latest
-    
-    # 💥 PERMISSÃO CRÍTICA (Adicione ao seu YAML) 💥
-    permissions:
-      issues: write
-      contents: read
-      
     steps:
-      - name: Adicionar Comentário ao PR e Notificar Igor
+      - name: Adicionar Comentário de Notificação ao Colega
+        # Usa uma Ação de terceiros para comentar no PR
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const prNumber = context.issue.number;
-            const prAuthor = context.payload.pull_request.user.login;
+            // O contexto do GitHub fornece todas as informações do evento, 
+            // incluindo o número do PR (issue_number) e o repositório.
             
-            const message = `
-              **⚠️ Atenção, @Igor-222222!**
-              
-              Um novo Pull Request (#${prNumber}) foi aberto por **@${prAuthor}**.
-              
-              É necessária a sua revisão deste PR.
-            `;
-
-            await github.rest.issues.createComment({
+            // Variável com o nome de utilizador do colega
+            const reviewer = 'IGOR-222222';
+            
+            // Envia um comentário para notificar o colega
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: prNumber,
-              body: message
+              body: `👋 Olá, @${reviewer}! O Pull Request #${context.issue.number} foi aberto. Por favor, revise o Javadoc que documentei.`,
             });
