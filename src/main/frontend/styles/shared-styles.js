@@ -1,6 +1,6 @@
 import { css } from "lit";
 
-// shared styles for all LitTemplate based views
+// shared styles for all LitTemplate based views + ALTERAÇÃO AQUI PARA TESTAR
 export const sharedStyles = css`
   *,
   *::before,
