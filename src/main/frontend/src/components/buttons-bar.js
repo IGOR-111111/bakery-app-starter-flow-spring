@@ -27,6 +27,7 @@ class ButtonsBarElement extends LitElement {
       :host {
         flex: none;
         display: flex;
+        /** ISTO E APENAS UM TESTE - B3 */
         flex-wrap: wrap;
         transition: box-shadow 0.2s;
         justify-content: space-between;
